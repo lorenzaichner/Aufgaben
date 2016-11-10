@@ -1,0 +1,63 @@
+use DB4_staiclor;
+
+CREATE TABLE Bewerb
+(Bewerbsid int NOT NULL,
+Sportart varchar(255) NOT NULL, 
+Bezeichnung varchar(255) NOT NULL, 
+Geschlecht varchar(10) NOT NULL, 
+Datum DATE NOT NULL, 
+PRIMARY KEY(Bewerbsid));
+
+CREATE TABLE Sportler
+(SportlerId int NOT NULL,
+VorName varchar(255) NOT NULL,
+NachName varchar(255) NOT NULL,
+Nationalitaet varchar(255) NOT NULL,
+Geschlecht varchar(10) NOT NULL,
+Geburtsdatum DATE NOT NULL,
+PRIMARY KEY(SportlerId,Vorname,Nachname,Nationalitaet)
+);
+
+CREATE TABLE Mannschaft(
+MannschaftsId int NOT NULL, 
+Nationalitaet varchar(255) NOT NULL, 
+Mannschaftsbezeichnung varchar(255) NOT NULL,
+PRIMARY KEY (MannschaftsId) 
+);
+
+CREATE TABLE NimmtTeil
+(Bewerbsid int NOT NULL, 
+SportlerID int NOT NULL,
+Startnr int NOT NULL,
+ErgebnisId int NOT NULL,
+PRIMARY KEY(ErgebnisId, Bewerbsid, Startnr), 
+FOREIGN KEY (Bewerbsid) REFERENCES Bewerb(Bewerbsid) on delete cascade,
+FOREIGN KEY (SportlerId) REFERENCES Sportler(SportlerId) on delete cascade
+);
+
+CREATE TABLE MannschaftNimmtTeil
+(Bewerbsid int NOT NULL, 
+MannschaftsId int NOT NULL, 
+Startnr int NOT NULL, 
+ErgebnisId int NOT NULL, 
+PRIMARY KEY(Bewerbsid,MannschaftsId), 
+FOREIGN KEY(Bewerbsid) REFERENCES NimmtTeil(Bewerbsid) ON DELETE CASCADE, 
+FOREIGN KEY(Startnr) REFERENCES NimmtTeil(Startnr) ON DELETE CASCADE, 
+FOREIGN KEY(ErgebnisId) REFERENCES NimmtTeil(ErgebnisId) ON DELETE CASCADE
+);
+
+
+CREATE TABLE TeilVon(
+MannschaftsId int NOT NULL,
+SportlerId int NOT NULL,
+PRIMARY KEY(MannschaftsId,SportlerId)
+FOREIGN KEY(MannschaftsId) REFERENCES Mannschaft(MannschaftsId) on delete cascade,
+FOREIGN KEY(SportlerID) REFERENCES Sportler(SportlerId) on delete cascade
+);
+
+CREATE TABLE Ergebnis(
+ErgebnisId int NOT NULL,
+Plazierung int NOT NULL,
+PRIMARY KEY(ErgebnisId)
+);
+

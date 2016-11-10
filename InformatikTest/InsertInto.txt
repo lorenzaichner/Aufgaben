@@ -1,0 +1,43 @@
+INSERT INTO customers(name, id, address, age, salary) VALUES ("Chaitali", 4, "Mumbai", 25, 6500);
+INSERT INTO customers(name, id, address, age) VALUES ("jakob", 5, "Under The Bridge", 18);
+INSERT INTO customers(name, id, address,) VALUES ("'MArtin", 5, "On The Roof");
+
+Wird etwas, was NOT NULL ist nicht angegeben, wird dies automatisch "0". <- Bei INT Default wert.
+Bei String auch default wert: leerer String <- nur wen default-Wert nicht angegeben ist
+
+------------------------------------------------o-------------------------------------------------
+Übung 51:
+
+CREATE TABLE Leiter
+(leiterEmail varchar(50) NOT NULL,
+leiterName varchar(50) NOT NULL,
+PRIMARY KEY(leiterEmail) // heist auch automatisch NOT NULL
+ );
+
+CREATE TABLE Kurs
+(kursNr int NOT NULL,
+titel varchar(50) NOT NULL,
+PRIMARY KEY(kursNr)
+);
+
+CREATE TABLE Leitet
+(leiterEmail varchar(50) NOT NULL,
+kursNr int NOT NULL,
+PRIMARY KEY(leiterEmail,kursNr),
+FOREIGN KEY(leiterEmail) REFERENCES Leiter(leiterEmail) ON DELETE CASCADE,
+FOREIGN KEY(kursNr) REFERENCES Kurs(kursNr) ON DELETE CASCADE
+);
+
+INSERT INTO Leiter(leiterEmail, leiterName) VALUES ("aichnerl@cyx.de", "Lorenz Aichner");
+INSERT INTO Kurs(kursNr, titel) VALUES (1, "Programmieren");
+INSERT INTO Leitet(leiterEmail, kursNr) VALUES ("aichnerl@cyx.de", 1);
+
+INSERT INTO Leiter(leiterEmail, leiterName) VALUES ("dellagojakob@cxy.de", "Dellago Jakob");
+INSERT INTO Kurs(kursNr, titel) VALUES (2, "Sport");
+INSERT INTO Leitet(leiterEmail, kursNr) VALUES ("dellagojakob@cxy.de", 2);
+
+UPDATE Leiter SET leiterEmail = "dellagojakob@gmail.com" WHERE leiterEmail = "dellagojakob@cxy.de"; // geht nicht, weil bei Foreign Key "on Update Cascade" fehlt 
+ UPDATE Leiter SET leiterName = "Dellago Jakob2" WHERE leiterEmail = "dellagojakob@cxy.de";
+
+DELETE FROM Leiter WHERE leiterEmail ="dellagojakob@cxy.de";
+DELETE FROM Kurs WHERE kursNr = 2;
